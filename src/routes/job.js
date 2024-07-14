@@ -18,7 +18,7 @@ router.get('/jobs',allJobs)
 
 router.get('/jobs/:id',getJobs)
 
-router.post('/addJob',verifyToken,validateJob,addJobs)
+router.post('/addjob',verifyToken,validateJob,addJobs)
 
 router.put('/updateJob/:id',verifyToken,validateJob,editJobs)
 

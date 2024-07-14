@@ -11,11 +11,7 @@ dotenv.config()
 
 const app = express()
 
-const corsOptions = {
-    origin: 'https://jobfinder-fe.vercel.app/',
-  };
-
-app.use(cors(corsOptions))
+app.use(cors())
 app.use(bodyParser.urlencoded())
 app.use(bodyParser.json())
 app.use(userRoutes)

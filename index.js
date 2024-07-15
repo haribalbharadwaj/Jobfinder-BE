@@ -27,12 +27,6 @@ app.get('/', (req, res) => {
     });
 });
 
-app.use("*", (req, res) => {
-    res.status(404).json({
-        message: 'Endpoint not found',
-        status: 'Error',
-    });
-});
 
 // Database connection
 mongoose.connect(process.env.MONGODB_URL)

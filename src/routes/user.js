@@ -14,4 +14,6 @@ router.post('/users/signup',validateUser,signUpUser);
 
 router.post('/users/login',loginUser);
 
+console.log('User routes registered');
+
 module.exports =router;

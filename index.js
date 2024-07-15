@@ -27,6 +27,12 @@ app.get('/', (req, res) => {
     });
 });
 
+app._router.stack.forEach(function(r){
+    if (r.route && r.route.path){
+        console.log(r.route.path)
+    }
+});
+
 
 // Database connection
 mongoose.connect(process.env.MONGODB_URL)

@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const { JWT_SECRET } = process.env; // Ensure JWT_SECRET is set in your environment variables
 
 const verifyToken = (req, res, next) => {
     try {
@@ -9,28 +8,29 @@ const verifyToken = (req, res, next) => {
                 message: 'Authorization header missing'
             });
         }
+        console.log('Auth Header:', authHeader); // Log the auth header
 
-        const token = authHeader.split(' ')[1];
+        const token = authHeader?.split(' ')[1];
+
+        console.log('Token:', token); // Log the token
+
         if (!token) {
+            console.log('Token not found');
             return res.status(401).json({
-                message: 'Token not found'
+                message: 'Token not found or valid'
             });
         }
 
-        jwt.verify(token, JWT_SECRET, (err, decoded) => {
-            if (err) {
-                console.error('Token verification error:', err.message);
-                return res.status(401).json({
-                    message: 'Token not valid'
-                });
-            }
-            req.userID = decoded.userID; // Set userID from decoded token
-            next();
-        });
+        const decoded = jwt.verify(token, 'secret');
+
+        console.log('Decoded Token:', decoded); // Log the decoded token
+
+        req.userID = decoded.userID; // Correctly set the userID
+        next();
     } catch (error) {
-        console.error('Error in verifyToken middleware:', error.message);
-        return res.status(500).json({
-            message: 'Internal server error'
+        console.log('Token verification error:', error.message); // Log any error
+        return res.status(401).json({
+            message: 'Token not found or valid'
         });
     }
 };

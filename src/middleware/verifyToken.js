@@ -6,13 +6,14 @@ const verifyToken = (req, res, next) => {
     try {
         const authHeader = req.header('Authorization');
         if (!authHeader) {
+            console.log('Authorization header missing');
             return res.status(401).json({
                 message: 'Authorization header missing'
             });
         }
         console.log('Auth Header:', authHeader); // Log the auth header
 
-        const token = authHeader?.split(' ')[1];
+        const token = authHeader.split(' ')[1];
 
         console.log('Token:', token); // Log the token
 

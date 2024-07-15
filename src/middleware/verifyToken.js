@@ -1,37 +1,18 @@
 const jwt = require('jsonwebtoken');
 
+
 const verifyToken = (req, res, next) => {
+
     try {
-        const authHeader = req.header('Authorization');
-        if (!authHeader) {
-            return res.status(401).json({
-                message: 'Authorization header missing'
-            });
-        }
-        console.log('Auth Header:', authHeader); // Log the auth header
-
-        const token = authHeader?.split(' ')[1];
-
-        console.log('Token:', token); // Log the token
-
-        if (!token) {
-            console.log('Token not found');
-            return res.status(401).json({
-                message: 'Token not found or valid'
-            });
-        }
+        const token = req.header('Authorization').split(' ')[1];
+        if (!token) return res.status(401).json({ message: 'Token Not Found or Valid' });
 
         const decoded = jwt.verify(token, 'secret');
-
-        console.log('Decoded Token:', decoded); // Log the decoded token
-
-        req.userID = decoded.userID; // Correctly set the userID
+        console.log(decoded);
+        req.refUserId = decoded.userID;
         next();
     } catch (error) {
-        console.log('Token verification error:', error.message); // Log any error
-        return res.status(401).json({
-            message: 'Token not found or valid'
-        });
+        return res.status(401).json({ message: 'Token Not Found or Valid' });
     }
 };
 

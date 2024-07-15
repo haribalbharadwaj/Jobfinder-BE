@@ -9,7 +9,8 @@ const errorHandler = require('./src/middleware/errorHandler')
 
 dotenv.config()
 
-const app = express()
+const app = express();
+const PORT = process.env.PORT || 4000;
 
 app.use(cors())
 app.use(bodyParser.urlencoded())
@@ -25,7 +26,7 @@ app.get('/',(req,res)=>{
     })
 })
 
-app.listen(process.env.PORT,()=>{
+app.listen(PORT,()=>{
     mongoose
         .connect(process.env.MONGODB_URL)
         .then(()=> console.log('Server is running'))

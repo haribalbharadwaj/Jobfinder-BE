@@ -2,18 +2,19 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const app = express();
 const userRoutes = require('./src/routes/user');
 const jobRoutes = require('./src/routes/job');
 const errorHandler = require('./src/middleware/errorHandler');
 
 dotenv.config();
 
-const app = express();
 const PORT = process.env.PORT;
 
 // Middleware
 app.use(cors());
 app.use(express.json()); // Use built-in express.json() instead of bodyParser
+app.use(express.urlencoded({ extended: true })); 
 app.use('/user',userRoutes);
 app.use('/job',jobRoutes);
 app.use(errorHandler);

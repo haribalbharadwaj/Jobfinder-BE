@@ -1,18 +1,39 @@
 const jwt = require('jsonwebtoken');
+const {JWT_Private_Key} = process.env;
 
 
 const verifyToken = (req, res, next) => {
-
     try {
-        const token = req.header('Authorization').split(' ')[1];
-        if (!token) return res.status(401).json({ message: 'Token Not Found or Valid' });
+        const authHeader = req.header('Authorization');
+        if (!authHeader) {
+            return res.status(401).json({
+                message: 'Authorization header missing'
+            });
+        }
+        console.log('Auth Header:', authHeader); // Log the auth header
 
-        const decoded = jwt.verify(token, 'secret');
-        console.log(decoded);
-        req.refUserId = decoded.userID;
+        const token = authHeader?.split(' ')[1];
+
+        console.log('Token:', token); // Log the token
+
+        if (!token) {
+            console.log('Token not found');
+            return res.status(401).json({
+                message: 'Token not found or valid'
+            });
+        }
+
+        const decoded = jwt.verify(token, JWT_Private_Key);
+
+        console.log('Decoded Token:', decoded); // Log the decoded token
+
+        req.userID = decoded.userID; // Correctly set the userID
         next();
     } catch (error) {
-        return res.status(401).json({ message: 'Token Not Found or Valid' });
+        console.log('Token verification error:', error.message); // Log any error
+        return res.status(401).json({
+            message: 'Token not found or valid'
+        });
     }
 };
 

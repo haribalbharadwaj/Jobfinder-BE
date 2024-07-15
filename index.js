@@ -14,15 +14,23 @@ const PORT = process.env.PORT || 4000;
 // Middleware
 app.use(cors());
 app.use(express.json()); // Use built-in express.json() instead of bodyParser
-app.use(userRoutes);
-app.use(jobRoutes);
+app.use('/user',userRoutes);
+app.use('/job',jobRoutes);
 app.use(errorHandler);
 
 // Routes
 app.get('/', (req, res) => {
-    res.send({
+    res.json({
+        message:'Job listing API is working fine',
         status: "Server is up",
         now: new Date().toLocaleDateString()
+    });
+});
+
+app.use("*", (req, res) => {
+    res.status(404).json({
+        message: 'Endpoint not found',
+        status: 'Error',
     });
 });
 

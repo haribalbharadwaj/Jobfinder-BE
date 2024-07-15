@@ -14,8 +14,8 @@ const PORT = process.env.PORT;
 // Middleware
 app.use(cors());
 app.use(express.json()); // Use built-in express.json() instead of bodyParser
-app.use('/user',userRoutes);
-app.use('/job',jobRoutes);
+app.use(userRoutes);
+app.use(jobRoutes);
 app.use(errorHandler);
 
 // Routes

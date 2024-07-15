@@ -1,6 +1,7 @@
 const User = require('../model/user')
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const JWT_Private_Key = process.env.JWT_Private_Key;
 
 const getUser = async(req,res)=>{
     try{
@@ -54,7 +55,7 @@ const loginUser = async(req,res,next)=>{
         if(existingUser){
             const passwordCorrect = await bcrypt.compare(password,existingUser.password);
             if(passwordCorrect){
-                const token = jwt.sign({userID:existingUser._id},'secret',{expiresIn:'1h'});
+                const token = jwt.sign({userID:existingUser._id},JWT_Private_Key,{expiresIn:'1h'});
                 return res.status(200).json({
                     message:'Login successful',
                     email:existingUser.email,

@@ -1,35 +1,39 @@
-const express = require('express')
-const mongoose = require('mongoose')
-const bodyParser = require('body-parser')
-const cors = require('cors')
-const dotenv = require('dotenv')
-const userRoutes = require('./src/routes/user')
-const jobRoutes = require('./src/routes/job')
-const errorHandler = require('./src/middleware/errorHandler')
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const dotenv = require('dotenv');
+const userRoutes = require('./src/routes/user');
+const jobRoutes = require('./src/routes/job');
+const errorHandler = require('./src/middleware/errorHandler');
 
-dotenv.config()
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-app.use(cors())
-app.use(express.json())
-app.use(bodyParser.urlencoded())
-app.use(bodyParser.json())
-app.use(userRoutes)
-app.use(jobRoutes)
+// Middleware
+app.use(cors());
+app.use(express.json()); // Use built-in express.json() instead of bodyParser
+app.use(userRoutes);
+app.use(jobRoutes);
 app.use(errorHandler);
 
-app.get('/',(req,res)=>{
+// Routes
+app.get('/', (req, res) => {
     res.send({
-        status:"Server is up",
-        now:new Date().toLocaleDateString()
-    })
-})
+        status: "Server is up",
+        now: new Date().toLocaleDateString()
+    });
+});
 
-app.listen(PORT,()=>{
-    mongoose
-        .connect(process.env.MONGODB_URL)
-        .then(()=> console.log('Server is running'))
-        .catch((error)=> console.log(error))
-})
+// Database connection
+mongoose.connect(process.env.MONGODB_URL)
+    .then(() => {
+        console.log('MongoDB connected');
+        app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+        });
+    })
+    .catch((error) => {
+        console.error('MongoDB connection error:', error);
+    });
